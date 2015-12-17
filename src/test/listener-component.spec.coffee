@@ -325,3 +325,42 @@ it 'should call the listener when stores are swap', (test) ->
   storeB = new MockStore()
   renderer.setContext({ store: storeB })
   test.true(listenerCalled)
+
+
+it 'should not fail when a service is not provided', (test) ->
+  class TestComponent extends ListenerComponent
+    @contextTypes:
+      store: React.PropTypes.object
+
+    getListeners: ->
+      store: @_handleStoreChange
+
+    _handleStoreChange: =>
+
+    render: ->
+      React.DOM.div(null)
+
+  context = {}
+  renderer = reactTestRender.createRenderer(TestComponent, context)
+  renderer.render()
+
+
+it 'should not fail when a service is removed', (test) ->
+  class TestComponent extends ListenerComponent
+    @contextTypes:
+      store: React.PropTypes.object
+
+    getListeners: ->
+      store: @_handleStoreChange
+
+    _handleStoreChange: =>
+
+    render: ->
+      React.DOM.div(null)
+
+  store = new MockStore()
+  context = { store }
+  renderer = reactTestRender.createRenderer(TestComponent, context)
+  renderer.render()
+
+  renderer.setContext({ store: null })

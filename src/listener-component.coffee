@@ -24,8 +24,9 @@ class ListenerComponent extends React.Component
 
     for contextKey, desc of listeners
       service = @context[contextKey]
-      desc = normalizeListenerDescriptor(desc, service)
-      desc.add.call(service, desc.listener)
+      if service
+        desc = normalizeListenerDescriptor(desc, service)
+        desc.add.call(service, desc.listener)
 
   componentWillUpdate: (nextProps, nextState, nextContext) ->
     listeners = @getListeners(@context)
@@ -33,7 +34,7 @@ class ListenerComponent extends React.Component
 
     for contextKey, desc of listeners
       service = @context[contextKey]
-      if service != nextContext[contextKey]
+      if service and service != nextContext[contextKey]
         desc = normalizeListenerDescriptor(desc, service)
         desc.remove.call(service, desc.listener)
 
@@ -43,7 +44,7 @@ class ListenerComponent extends React.Component
 
     for contextKey, desc of listeners
       service = @context[contextKey]
-      if service != prevContext[contextKey]
+      if service and service != prevContext[contextKey]
         desc = normalizeListenerDescriptor(desc, service)
         desc.listener.call(null)
         desc.add.call(service, desc.listener)
@@ -54,8 +55,9 @@ class ListenerComponent extends React.Component
 
     for contextKey, desc of listeners
       service = @context[contextKey]
-      desc = normalizeListenerDescriptor(desc, service)
-      desc.remove.call(service, desc.listener)
+      if service
+        desc = normalizeListenerDescriptor(desc, service)
+        desc.remove.call(service, desc.listener)
 
 
 module.exports = ListenerComponent
