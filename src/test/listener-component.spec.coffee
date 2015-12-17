@@ -298,3 +298,30 @@ it 'should unregister a change listener using a custom method', (test) ->
   # NOTE: Rendering a different element type results in an unmount.
   renderer.render(React.createElement(AnotherComponent), context)
   test.is(store.listeners.length, 0)
+
+
+it 'should call the listener when stores are swap', (test) ->
+  listenerCalled = false
+
+  class TestComponent extends ListenerComponent
+    @contextTypes:
+      store: React.PropTypes.object.isRequired
+
+    getListeners: ->
+      store: @_handleStoreChange
+
+    _handleStoreChange: =>
+      listenerCalled = true
+
+    render: ->
+      React.DOM.div(null)
+
+  storeA = new MockStore()
+  context = { store: storeA }
+  renderer = reactTestRender.createRenderer(TestComponent, context)
+  renderer.render()
+  test.false(listenerCalled)
+
+  storeB = new MockStore()
+  renderer.setContext({ store: storeB })
+  test.true(listenerCalled)

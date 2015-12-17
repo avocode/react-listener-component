@@ -45,6 +45,7 @@ class ListenerComponent extends React.Component
       service = @context[contextKey]
       if service != prevContext[contextKey]
         desc = normalizeListenerDescriptor(desc, service)
+        desc.listener.call(null)
         desc.add.call(service, desc.listener)
 
   componentWillUnmount: ->
