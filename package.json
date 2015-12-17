@@ -1,0 +1,21 @@
+{
+  "name": "react-listener-component",
+  "version": "1.0.0",
+  "main": "lib/listener-component",
+  "scripts": {
+    "build": "rm -rf lib && coffee -c -o lib src",
+    "prepublish": "npm run build",
+    "postinstall": "npm run build",
+    "test": "npm run build && ava lib/test"
+  },
+  "peerDependencies": {
+    "react": ">=0.14.3"
+  },
+  "devDependencies": {
+    "ava": "*",
+    "coffee-script": "1.9.1",
+    "react": "0.14.3",
+    "react-test-render": "jankuca/react-test-render",
+    "react-addons-test-utils": "0.14.3"
+  }
+}
