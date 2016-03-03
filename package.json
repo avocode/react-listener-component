@@ -5,7 +5,6 @@
   "scripts": {
     "build": "rm -rf lib && coffee -c -o lib src",
     "prepublish": "npm run build",
-    "postinstall": "npm run build",
     "test": "npm run build && ava lib/test"
   },
   "peerDependencies": {
