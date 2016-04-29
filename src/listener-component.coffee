@@ -23,7 +23,7 @@ class ListenerComponent extends React.Component
     return if !listeners
 
     for contextKey, desc of listeners
-      service = @context[contextKey]
+      service = @context[contextKey] or @props[contextKey]
       if service
         desc = normalizeListenerDescriptor(desc, service)
         desc.add.call(service, desc.listener)
@@ -33,8 +33,9 @@ class ListenerComponent extends React.Component
     return if !listeners
 
     for contextKey, desc of listeners
-      service = @context[contextKey]
-      if service and service != nextContext[contextKey]
+      service = @context[contextKey] or @props[contextKey]
+      nextService = nextContext[contextKey] or nextProps[contextKey]
+      if service and service != nextService
         desc = normalizeListenerDescriptor(desc, service)
         desc.remove.call(service, desc.listener)
 
@@ -43,8 +44,9 @@ class ListenerComponent extends React.Component
     return if !listeners
 
     for contextKey, desc of listeners
-      service = @context[contextKey]
-      if service and service != prevContext[contextKey]
+      service = @context[contextKey] or @props[contextKey]
+      prevService = prevContext[contextKey] or prevProps[contextKey]
+      if service and service != prevService
         desc = normalizeListenerDescriptor(desc, service)
         desc.listener.call(null)
         desc.add.call(service, desc.listener)
@@ -54,7 +56,7 @@ class ListenerComponent extends React.Component
     return if !listeners
 
     for contextKey, desc of listeners
-      service = @context[contextKey]
+      service = @context[contextKey] or @props[contextKey]
       if service
         desc = normalizeListenerDescriptor(desc, service)
         desc.remove.call(service, desc.listener)

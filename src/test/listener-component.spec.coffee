@@ -45,6 +45,32 @@ it 'should register a change listener for a single store', (test) ->
   test.true(listenerCalled)
 
 
+it 'should register a change listener for a single store passed in via props',
+(test) ->
+  listenerCalled = false
+
+  class TestComponent extends ListenerComponent
+    @propTypes:
+      store: React.PropTypes.object.isRequired
+
+    getListeners: ->
+      store: @_handleStoreChange
+
+    _handleStoreChange: =>
+      listenerCalled = true
+
+    render: ->
+      React.DOM.div(null)
+
+  store = new MockStore()
+  renderer = reactTestRender.createRenderer(TestComponent)
+
+  renderer.render({ store })
+  test.is(store.listeners.length, 1)
+  store.listeners[0].call(null)
+  test.true(listenerCalled)
+
+
 it 'should register a change listener for a multiple stores', (test) ->
   listenerLog = []
 
@@ -102,6 +128,52 @@ it 'should unregister the change listener of the previous store on swap',
   renderer.render()
   renderer.setContext({ store: storeB })
   test.is(storeA.listeners.length, 0)
+
+
+it 'should unregister the change listener of the previous store on swap ' +
+    'when it was passed in via props', (test) ->
+  class TestComponent extends ListenerComponent
+    @propTypes:
+      store: React.PropTypes.object.isRequired
+
+    getListeners: ->
+      store: @_handleStoreChange
+
+    _handleStoreChange: =>
+
+    render: ->
+      React.DOM.div(null)
+
+  storeA = new MockStore()
+  storeB = new MockStore()
+  renderer = reactTestRender.createRenderer(TestComponent)
+
+  renderer.render({ store: storeA })
+  renderer.render({ store: storeB })
+  test.is(storeA.listeners.length, 0)
+
+
+it 'should not unregister the change listener of a store when it is ' +
+    'passed in via props multiple times in a row', (test) ->
+  class TestComponent extends ListenerComponent
+    @propTypes:
+      store: React.PropTypes.object.isRequired
+
+    getListeners: ->
+      store: @_handleStoreChange
+
+    _handleStoreChange: =>
+
+    render: ->
+      React.DOM.div(null)
+
+  storeA = new MockStore()
+  renderer = reactTestRender.createRenderer(TestComponent)
+
+  renderer.render({ store: storeA })
+  renderer.render({ store: storeA })
+  test.is(storeA.listeners.length, 1)
+  test.is(storeA.totalListenerCount, 1)
 
 
 it 'should register a change listener on the next store on swap',
