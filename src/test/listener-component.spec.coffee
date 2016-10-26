@@ -372,7 +372,7 @@ it 'should unregister a change listener using a custom method', (test) ->
   test.is(store.listeners.length, 0)
 
 
-it 'should call the listener when stores are swap', (test) ->
+it 'should call the listener when stores are swapped', (test) ->
   listenerCalled = false
 
   class TestComponent extends ListenerComponent
@@ -397,6 +397,30 @@ it 'should call the listener when stores are swap', (test) ->
   storeB = new MockStore()
   renderer.setContext({ store: storeB })
   test.true(listenerCalled)
+
+
+it 'should not fail when the listener is not provided when stores are swapped ' +
+    'while using a custom method', (test) ->
+  class TestComponent extends ListenerComponent
+    @contextTypes:
+      store: React.PropTypes.object.isRequired
+
+    getListeners: ->
+      store:
+        listener: null
+        add: ->
+        remove: ->
+
+    render: ->
+      React.DOM.div(null)
+
+  storeA = new MockStore()
+  context = { store: storeA }
+  renderer = reactTestRender.createRenderer(TestComponent, context)
+  renderer.render()
+
+  storeB = new MockStore()
+  renderer.setContext({ store: storeB })
 
 
 it 'should not fail when a service is not provided', (test) ->
