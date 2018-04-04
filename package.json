@@ -3,7 +3,7 @@
   "version": "1.1.2",
   "main": "lib/listener-component",
   "scripts": {
-    "build": "rm -rf lib && coffee -c -o lib src",
+    "build": "rm -rf lib && coffee -c -o lib src && cp src/*.js lib/",
     "prepublish": "npm run build",
     "test": "npm run build && ava lib/test"
   },

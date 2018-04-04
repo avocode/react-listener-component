@@ -1,5 +1,7 @@
 React = require 'react'
 
+shallowDiffer = require './shallow-differ'
+
 
 normalizeListenerDescriptor = (desc, service) ->
   if typeof desc == 'function'
@@ -27,6 +29,12 @@ class ListenerComponent extends React.Component
       if service
         desc = normalizeListenerDescriptor(desc, service)
         desc.add.call(service, desc.listener)
+
+  shouldComponentUpdate: (nextProps, nextState, nextContext) ->
+    return (
+      shallowDiffer(@props, nextProps) or
+      shallowDiffer(@context, nextContext)
+    )
 
   componentWillUpdate: (nextProps, nextState, nextContext) ->
     listeners = @getListeners(@context)
