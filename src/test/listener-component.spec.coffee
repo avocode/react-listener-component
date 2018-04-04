@@ -460,3 +460,37 @@ it 'should not fail when a service is removed', (test) ->
   renderer.render()
 
   renderer.setContext({ store: null })
+
+
+it 'should update when state of a child class changes', (test) ->
+  class TestComponent extends ListenerComponent
+    @contextTypes:
+      store: React.PropTypes.object
+
+    constructor: ->
+      super
+      @state = @_getState()
+
+    getListeners: ->
+      store: @_handleStoreChange
+
+    _handleStoreChange: =>
+      @setState(@_getState())
+
+    _getState: ->
+      value: @context.store.getValue()
+
+    render: ->
+      React.DOM.div(null, "#{@state.value}")
+
+  store = new MockStore()
+  store.id = 1
+  context = { store }
+
+  renderer = reactTestRender.createRenderer(TestComponent, context)
+  renderer.render()
+
+  store.id = 2
+  store.emitChange()
+
+  test.is(renderer.getTextContent(), '2')

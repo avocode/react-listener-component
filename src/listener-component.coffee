@@ -33,6 +33,7 @@ class ListenerComponent extends React.Component
   shouldComponentUpdate: (nextProps, nextState, nextContext) ->
     return (
       shallowDiffer(@props, nextProps) or
+      shallowDiffer(@state, nextState) or
       shallowDiffer(@context, nextContext)
     )
 
