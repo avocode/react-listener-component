@@ -5,16 +5,13 @@
   "scripts": {
     "build": "rm -rf lib && coffee -c -o lib src && cp src/*.js lib/",
     "prepublish": "npm run build",
-    "test": "npm run build && ava lib/test"
-  },
-  "engines": {
-    "node": "4.x.x"
+    "test": "npm run build && ava lib/test/**/*.spec.js"
   },
   "peerDependencies": {
     "react": ">=0.14.3"
   },
   "devDependencies": {
-    "ava": "0.8.0",
+    "ava": "0.16.0",
     "coffee-script": "1.9.1",
     "react": "0.14.3",
     "react-addons-test-utils": "0.14.3",
