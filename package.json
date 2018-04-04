@@ -7,14 +7,17 @@
     "prepublish": "npm run build",
     "test": "npm run build && ava lib/test"
   },
+  "engines": {
+    "node": "4.x.x"
+  },
   "peerDependencies": {
     "react": ">=0.14.3"
   },
   "devDependencies": {
-    "ava": "*",
+    "ava": "0.8.0",
     "coffee-script": "1.9.1",
     "react": "0.14.3",
-    "react-test-render": "jankuca/react-test-render",
-    "react-addons-test-utils": "0.14.3"
+    "react-addons-test-utils": "0.14.3",
+    "react-test-render": "1.1.1"
   }
 }
