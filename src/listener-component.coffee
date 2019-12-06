@@ -24,6 +24,8 @@ class ListenerComponent extends React.Component
     listeners = @getListeners(@context)
     return if !listeners
 
+    @prevContext = @context
+
     for contextKey, desc of listeners
       service = @context[contextKey] or @props[contextKey]
       if service
@@ -48,13 +50,13 @@ class ListenerComponent extends React.Component
         desc = normalizeListenerDescriptor(desc, service)
         desc.remove.call(service, desc.listener)
 
-  componentDidUpdate: (prevProps, prevState, prevContext) ->
+  componentDidUpdate: (prevProps, prevState) ->
     listeners = @getListeners(@context)
     return if !listeners
 
     for contextKey, desc of listeners
       service = @context[contextKey] or @props[contextKey]
-      prevService = prevContext[contextKey] or prevProps[contextKey]
+      prevService = @prevContext[contextKey] or prevProps[contextKey]
       if service and service != prevService
         desc = normalizeListenerDescriptor(desc, service)
 
@@ -62,6 +64,8 @@ class ListenerComponent extends React.Component
           desc.listener.call(null)
 
         desc.add.call(service, desc.listener)
+    
+    @prevContext = @context
 
   componentWillUnmount: ->
     listeners = @getListeners(@context)
